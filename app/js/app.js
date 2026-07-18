@@ -286,24 +286,28 @@ function _bindEvents() {
     const _BOTTOM_MIN   = 220;
     const _BOTTOM_MAX   = 440;
 
-    _resizeHandle.addEventListener('mousedown', e => {
+    _resizeHandle.addEventListener('pointerdown', e => {
+        if (window.matchMedia('(max-width: 1180px)').matches) return;
         e.preventDefault();
         const startY      = e.clientY;
         const startHeight = document.getElementById('bottom-area').getBoundingClientRect().height;
         _resizeHandle.classList.add('dragging');
+        _resizeHandle.setPointerCapture(e.pointerId);
 
         const onMove = ev => {
             const delta     = startY - ev.clientY;
             const newHeight = Math.min(_BOTTOM_MAX, Math.max(_BOTTOM_MIN, startHeight + delta));
-            _appEl.style.gridTemplateRows = `52px 1fr 5px ${newHeight}px 36px`;
+            _appEl.style.setProperty('--bottom-height', `${newHeight}px`);
         };
         const onUp = () => {
             _resizeHandle.classList.remove('dragging');
-            document.removeEventListener('mousemove', onMove);
-            document.removeEventListener('mouseup',   onUp);
+            _resizeHandle.removeEventListener('pointermove', onMove);
+            _resizeHandle.removeEventListener('pointerup', onUp);
+            _resizeHandle.removeEventListener('pointercancel', onUp);
         };
-        document.addEventListener('mousemove', onMove);
-        document.addEventListener('mouseup',   onUp);
+        _resizeHandle.addEventListener('pointermove', onMove);
+        _resizeHandle.addEventListener('pointerup', onUp);
+        _resizeHandle.addEventListener('pointercancel', onUp);
     });
 }
 

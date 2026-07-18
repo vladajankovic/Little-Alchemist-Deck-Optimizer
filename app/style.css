@@ -105,12 +105,21 @@ html, body {
     overflow: hidden;
 }
 
+html {
+    color-scheme: dark;
+}
+
+body.light {
+    color-scheme: light;
+}
+
 /* ── Layout skeleton ─────────────────────────────────────── */
 #app {
     display: grid;
-    grid-template-rows: 52px 1fr 5px 220px 36px;
-    height: 100vh;
-    min-width: 900px;
+    grid-template-rows: 52px minmax(0, 1fr) 5px var(--bottom-height, 220px) 36px;
+    min-height: 100vh;
+    height: 100dvh;
+    min-width: 0;
 }
 
 /* ── Top bar ─────────────────────────────────────────────── */
@@ -156,7 +165,7 @@ html, body {
 /* ── Main content area (3 columns) ──────────────────────── */
 #main-content {
     display: grid;
-    grid-template-columns: 1fr 1fr 1.2fr;
+    grid-template-columns: minmax(280px, 1fr) minmax(300px, 1fr) minmax(340px, 1.2fr);
     gap: 6px;
     padding: 6px 6px 0;
     overflow: hidden;
@@ -290,6 +299,7 @@ button {
     transition: background 0.15s, color 0.15s;
     white-space: nowrap;
     user-select: none;
+    touch-action: manipulation;
 }
 
 button:hover  { background: var(--btn-hover); }
@@ -376,6 +386,7 @@ input[type="checkbox"] { accent-color: var(--accent); width: 14px; height: 14px;
     flex-shrink: 0;
     transition: background 0.15s;
     user-select: none;
+    touch-action: none;
 }
 #bottom-resize-handle:hover,
 #bottom-resize-handle.dragging {
@@ -506,6 +517,9 @@ input[type="checkbox"] { accent-color: var(--accent); width: 14px; height: 14px;
     left: 50%;
     transform: translate(-50%, -50%);
     display: none;
+    width: min(calc(100% - 32px), 460px);
+    max-height: calc(100dvh - 32px);
+    overflow: auto;
 }
 .modal.visible { display: block; }
 
@@ -576,6 +590,20 @@ input[type="checkbox"] { accent-color: var(--accent); width: 14px; height: 14px;
 
 /* ── Confirm dialog ──────────────────────────────────────── */
 #modal-confirm { max-width: 340px; }
+
+.conflict-options {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.conflict-option {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px;
+}
 
 #modal-confirm .modal-body p {
     font-size: 13px;
@@ -688,3 +716,272 @@ input[type="checkbox"] { accent-color: var(--accent); width: 14px; height: 14px;
 .text-fg2     { color: var(--fg2); }
 .text-score   { color: var(--score-fg); font-weight: 700; }
 .bold { font-weight: 700; }
+
+/* Responsive layouts ----------------------------------------------------- */
+@media (max-width: 1180px) {
+    html, body {
+        height: auto;
+        min-height: 100%;
+        overflow: auto;
+    }
+
+    #app {
+        height: auto;
+        min-height: 100dvh;
+        grid-template-rows: auto auto 0 auto auto;
+    }
+
+    #topbar {
+        min-height: 52px;
+        padding: 8px 12px;
+        flex-wrap: wrap;
+        gap: 8px 12px;
+    }
+
+    #topbar .btn-group {
+        margin-left: auto;
+    }
+
+    #main-content {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        overflow: visible;
+    }
+
+    #library-panel,
+    #deck-panel {
+        min-height: 520px;
+    }
+
+    #suggestions-panel {
+        grid-column: 1 / -1;
+        min-height: 360px;
+    }
+
+    #bottom-resize-handle {
+        display: none;
+    }
+
+    #bottom-area {
+        min-height: 340px;
+        margin-top: 6px;
+    }
+
+    #statusbar {
+        min-height: 40px;
+    }
+}
+
+@media (max-width: 720px) {
+    html, body {
+        font-size: 14px;
+    }
+
+    #topbar {
+        align-items: center;
+    }
+
+    #topbar h1 {
+        flex: 1 0 calc(100% - 120px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #score-display {
+        order: 2;
+    }
+
+    #info-display {
+        order: 3;
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #topbar .spacer {
+        display: none;
+    }
+
+    #topbar .btn-group {
+        order: 4;
+        width: 100%;
+        margin-left: 0;
+    }
+
+    #topbar .btn-group button {
+        flex: 1;
+        justify-content: center;
+    }
+
+    #main-content {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 8px;
+        padding: 8px;
+    }
+
+    #library-panel,
+    #deck-panel,
+    #suggestions-panel {
+        grid-column: auto;
+        min-height: min(620px, 78dvh);
+    }
+
+    #suggestions-panel {
+        min-height: 440px;
+    }
+
+    .panel-header {
+        min-height: 44px;
+        padding: 6px 10px;
+    }
+
+    .panel-header input[type="text"] {
+        width: min(48vw, 220px);
+        min-height: 36px;
+    }
+
+    button {
+        min-height: 40px;
+        padding: 7px 10px;
+        justify-content: center;
+    }
+
+    .btn-toolbar {
+        gap: 6px;
+        padding: 6px;
+    }
+
+    .btn-toolbar button {
+        flex: 1 1 auto;
+    }
+
+    .ml-auto {
+        margin-left: 0;
+    }
+
+    #startcard-row {
+        flex-wrap: wrap;
+        padding: 7px 8px;
+    }
+
+    #startcard-row select {
+        min-width: 0;
+        min-height: 40px;
+    }
+
+    table {
+        font-size: 13px;
+    }
+
+    thead th,
+    td {
+        padding: 7px 6px;
+    }
+
+    /* Keep the most useful card data visible without horizontal clipping. */
+    #lib-table th:nth-child(4),
+    #lib-table td:nth-child(4),
+    #lib-table th:nth-child(5),
+    #lib-table td:nth-child(5),
+    #deck-table th:nth-child(5),
+    #deck-table td:nth-child(5),
+    #deck-table th:nth-child(6),
+    #deck-table td:nth-child(6),
+    #sug-table th:nth-child(4),
+    #sug-table td:nth-child(4) {
+        display: none;
+    }
+
+    #bottom-area {
+        min-height: 420px;
+        margin-top: 0;
+    }
+
+    #tab-bar {
+        overflow-x: auto;
+    }
+
+    .tab-btn {
+        min-height: 44px;
+        flex: 1 0 auto;
+    }
+
+    #leaderboard-content .btn-toolbar button {
+        flex-basis: calc(50% - 6px);
+    }
+
+    #statusbar {
+        min-height: 48px;
+        padding: 5px 8px;
+        flex-wrap: wrap;
+        gap: 4px 8px;
+        position: sticky;
+        bottom: 0;
+        z-index: 10;
+    }
+
+    #status-text {
+        flex-basis: calc(100% - 90px);
+    }
+
+    #progress-bar {
+        order: 3;
+        width: 100%;
+    }
+
+    #toast {
+        bottom: 64px;
+        width: calc(100% - 32px);
+        white-space: normal;
+        text-align: center;
+    }
+
+    .modal {
+        min-width: 0;
+        width: calc(100% - 24px);
+        max-height: calc(100dvh - 24px);
+    }
+
+    .modal-body .field {
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+
+    .modal-footer {
+        flex-wrap: wrap;
+    }
+
+    .modal-footer button {
+        flex: 1;
+    }
+
+    .conflict-options {
+        flex-direction: column;
+    }
+
+    #load-overlay {
+        padding: 16px;
+    }
+
+    #load-overlay .load-card {
+        width: 100%;
+        min-width: 0;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 420px) {
+    #topbar h1 {
+        flex-basis: 100%;
+    }
+
+    .theme-toggle {
+        margin-right: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}

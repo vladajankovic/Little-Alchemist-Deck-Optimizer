@@ -303,13 +303,13 @@
     </div>
     <div class="modal-body">
         <p>A card with the same name, fused and Onyx flags already exists. Choose which entry to keep:</p>
-        <div style="display:flex;gap:12px;margin-top:10px">
-            <div style="flex:1;border:1px solid var(--border);border-radius:6px;padding:10px">
+        <div class="conflict-options">
+            <div class="conflict-option">
                 <div style="font-weight:600;margin-bottom:6px">Edited (new values)</div>
                 <div id="conflict-edited"></div>
                 <button id="btn-conflict-keep-edited" class="accent" style="margin-top:10px;width:100%">Keep this</button>
             </div>
-            <div style="flex:1;border:1px solid var(--border);border-radius:6px;padding:10px">
+            <div class="conflict-option">
                 <div style="font-weight:600;margin-bottom:6px">Existing entry</div>
                 <div id="conflict-existing"></div>
                 <button id="btn-conflict-keep-existing" style="margin-top:10px;width:100%">Keep this</button>
