@@ -93,7 +93,13 @@ Outputs a fully optimised, self-contained site to `dist/`. The contents of `dist
 
 ### Rebuilding after a game update
 
-Re-run `python app/data_loader.py` whenever you have a new `.xlsm`, then commit the updated `combo_data.json`.
+Just replace the `.xlsm` file in the project root and push to `master`. A GitHub Actions workflow ([regen-combo-data.yml](.github/workflows/regen-combo-data.yml)) detects the change, re-runs `data_loader.py`, and commits the regenerated `app/combo_data.json` back to the repo automatically. The deploy workflow also regenerates the data from the current `.xlsm` as part of every build, so the live site always reflects whatever `.xlsm` is checked in even if the auto-commit hasn't landed yet.
+
+If you're working locally and want fresh data right away (e.g. before the CI commit lands), you can still run it manually:
+
+```
+python app/data_loader.py
+```
 
 ---
 
